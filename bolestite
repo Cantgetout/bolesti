@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="bg">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Болести</title>
+        <link rel="icon" href="Virus-icon.png">
+        <!-- <script src="https://unpkg.com/vue"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    </head>
+        <style>
+            .card123{
+                position: relative;
+                display: none;
+                flex-direction: column;
+                min-width: 0;
+                word-wrap: break-word;
+                background-color: #fff;
+                background-clip: border-box;
+                border: 1px solid rgba(0,0,0,.125);
+                border-radius: 0.25rem;
+                }
+            .card1{
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                word-wrap: break-word;
+                background-color: #fff;
+                background-clip: border-box;
+                }
+            .card12:hover .card123{
+                display: flex;
+            }
+        </style>
+    <body>
+        <div class="container">
+            <div class="navbar navbar-dark bg-primary text-secondary w-100">
+                 <button style="margin: auto; border: transparent; background-color: transparent;" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                     Нашата цел
+                 </button>   
+            </div>
+        </div>
+        <div class='card12' style="margin: 0; padding: 0; box-sizing: border-box;">
+            <div class="card1" style="position: fixed; bottom: 10px; right: 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" style="height: 2rem; width: 2rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div class="card123" style="position: fixed; width: 17rem; bottom: 10px; right: 10px;">
+              <div class="card-body">
+                <h5 class="card-title">
+                Как се използва?</h5>
+                <p class="card-text">Изберете симптом, като кликнете на него, вдясно ще се появят възможните болести.</p>
+                <p style="color: blue;">Симптомите са по азбучен ред.</p>
+              </div>
+            </div>
+        </div>    
+        <div id="app">
+            <div class="container">
+                <div class="row mt-5">
+                    <div class="col-4">
+                        <h4>Симптоми</h4>
+                        <div class="d-flex justify-content-end flex-wrap">
+                            <div v-for="(simp, siindex) in simptomi" class="my-1 mx-1 flex-shrink-0">
+                                <button
+                                    :class="selected.includes(simp) ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                                    @click="toggleSimptom(simp)">
+                                {{ simp }}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8 row align-self-start">
+                        <h4>Болести</h4>
+                        <div class="col-4 p-1" v-for="(bolest, bindex) in filtered_bolesti">
+                            <div class="card rouded shadow">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ bolest.id }}</h5>
+                                    <div v-for="(simptom, sindex) in bolest.simptoms">
+                                        <span
+                                            :class="selected.includes(simptom) ? 'badge bg-danger' : 'badge bg-primary'">
+                                            {{ simptom }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+    <script>
+
+      new Vue({
+        el: "#app",
+        data: {
+          bolesti: [
+            { id: "алергии" , simptoms: ['хрема','сърбеж в носа','сърбеж на очите'] },
+            { id: "анемия", simptoms: ['отпадналост','слаба концентрация','дискомфорт'] },
+            { id: "апендицит", simptoms: ['безапетитие','гадене','диария','болки в корема','повишена температура'] },
+            { id: "астма", simptoms: ['кашлица','болка в гърдите','хриптене'] },
+            { id: "асцит", simptoms: ['болки в корема','гадене','безапетитие','бързо наддаване на тегло'] },
+            { id: "атаксия", simptoms: ['некоординирани движения','треперене','затруднено равновесие'] },
+            { id: "базедова болест", simptoms: ['мускулни болки','изпъкване на око/очи','потене'] },
+            { id: "бронхит", simptoms: ['отпадналост','главоболие','повишена температура','хрема','кашлица','болка в гърлото'] },
+            { id: "варицела", simptoms: ['отпадналост','главоболие','безапетитие','хрема','кашлица','болки в корема'] },
+            { id: "гастрит", simptoms: ['сухота в устата','гадене','затруднено равновесие'] },
+            { id: "грип", simptoms: ['главоболие','безапетитие','болки при преглъщане'] },
+            { id: "диабет", simptoms: ['отпадналост','често уриниране','затъмнено зрение'] },
+            { id: "дифтерия", simptoms: ['отпадналост','треска','болки при преглъщане','болка в гърлото'] },
+            { id: "едра шарка", simptoms: ['повишена температура','гадене','повръщане','главоболие','отпадналост'] },
+            { id: "епилепсия", simptoms: ['затруднено равновесие','временно объркване','некоординирани движения','тревожност'] },
+            { id: "жълтеница", simptoms: ['жълто оцветяване на косата','жълто оцветяване на лигавиците'] },
+            { id: "запек", simptoms: ['трудно ходене до тоалетна'] },
+            { id: "инфаркт", simptoms: ['болка в гърдите','гадене','повръщане','затруднено равновесие','потене'] },
+            { id: "язва" , simptoms: ['болки в корема','киселини','гадене','повръщане'] },
+            { id: "хепатит" , simptoms: ['гадене','повръщане','отпадналост','повишена температура','мускулни болки','безапетитие'] },
+            { id: "тахикардия" , simptoms: ['учестен пулс','отпадналост','замаяност','болка в гърдите'] },
+            { id: "туберколоза" , simptoms: ['кашлица','повишена температура','болка в гърдите','отпадналост','храчки'] },
+            { id: "тонзилит" , simptoms: ['отпадналост','повишена температура','болка в гърлото'] },
+            { id: "тетанус" , simptoms: ['отпадналост','повишена температура','болка'] },
+            { id: "синузит" , simptoms: ['кашлица','повишена температура','болка в гърлото','отпадналост','хрема','безапетитие'] },
+            { id: "силикоза" , simptoms: ['кашлица','храчки','отпадналост','болка в гърдите'] },
+            { id: "салмонелоза" , simptoms: ['гадене','повръщане','главоболие','диария','болки в корема'] },
+            { id: "рак на дебелото черво" , simptoms: ['диария','болки в корема','отпадналост'] },
+            { id: "простатит" , simptoms: ['болки в корема','повишена температура'] },
+            { id: "пневмония" , simptoms: ['кашлица','повишена температура','мускулни болки','болка в гърдите','гадене','повръщане','учестен пулс','главоболие','безапетитие'] },
+            { id: "парализа" , simptoms: ['главоболие','гадене','скованост','загуба на съзнание'] },
+            { id: "панкреатит" , simptoms: ['болки в корема','гадене','повръщане','повишена температура','подуване на корема'] },
+            { id: "отит" , simptoms: ['заглъхване в ушите','повишена температура','отпадналост','раздразнителност'] },
+            { id: "настинка" , simptoms: ['кашлица','повишена температура','хрема','отпадналост','главоболие'] },
+            { id: "миастения" , simptoms: ['стрес','мускулни болки','отпадналост'] },
+            { id: "мигрена" , simptoms: ['главоболие','гадене','повръщане','безапетитие'] },
+          ],
+          simptomi: [
+            'безапетитие',
+            'болка',
+            'болка в гърдите',
+            'болка в гърлото',
+            'болки в корема',
+            'болки при преглъщане',
+            'бързо наддаване на тегло',
+            'временно объркване',
+            'гадене',
+            'главоболие',
+            'диария',
+            'дискомфорт',
+            'жълто оцветяване на косата',
+            'жълто оцветяване на лигавиците',
+            'заглъхване в ушите',
+            'загуба на съзнание',
+            'замаяност',
+            'затруднено равновесие',
+            'затъмнено зрение',
+            'изпъкване на око/очи',
+            'кашлица',
+            'киселини',
+            'мускулни болки',
+            'некоординирани движения',
+            'отпадналост',
+            'повишена температура',
+            'повръщане',
+            'подуване на корема',
+            'потене',
+            'раздразнителност',
+            'скованост',
+            'слаба концентрация',
+            'стрес',
+            'сухота в устата',
+            'сърбеж в носа',
+            'сърбеж на очите',
+            'тревожност',
+            'треперене',
+            'треска',
+            'трудно ходене до тоалетна',
+            'учестен пулс',
+            'храчки',
+            'хрема', 
+            'хриптене',
+            'често уриниране',
+          ],
+          selected: [],
+        },
+        computed: {
+            filtered_bolesti() {
+                let tmp = [];
+                this.selected.forEach(sel => {
+                    this.bolesti.forEach( bol => {
+                        if(bol.simptoms.includes(sel) && !tmp.includes(bol)){
+                            tmp.push(bol);
+                        }
+                    })
+                })
+                return tmp;
+            }
+        },
+        methods: {
+            toggleSimptom(name){
+                if(this.selected.includes(name)){
+                    this.selected = this.selected.filter(sel => sel !== name)
+                } else {
+                    this.selected.push(name)
+                }
+            }
+        }
+      });
+    </script>
+    </body>
+</html>
